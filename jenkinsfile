@@ -1,0 +1,12 @@
+node {
+    def mavenHome = tool name: "Maventestw"
+    stage ('git') {
+        git credentialsId: 'santu15', url: 'https://github.com/santu15/webapp.git'
+     }
+    stage('maven') {
+         sh"${mavenHome}/bin/mvn clean package"
+     }
+    stage('tomcat'){
+       deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://54.89.187.255:8089/')], contextPath: 'Target/WebApp.war', war: '**/*.war'
+    }
+}
